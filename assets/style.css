@@ -1,12 +1,3 @@
-body {
-    background-color: #333; 
-    color: #fff; 
-    font-family: Arial, sans-serif;
-}
-
-header, main, footer {
-    padding: 20px;
-}
 .image-container {
     display: flex;
     justify-content: center;
@@ -23,11 +14,16 @@ header, main, footer {
     cursor: pointer;
 }
 
+.shake {
+    animation: shake 0.5s;
+}
+
 @keyframes shake {
     0% { transform: translate(0, 0); }
-    10%, 30%, 50%, 70%, 90% { transform: translate(-5px, 0); }
-    20%, 40%, 60%, 80% { transform: translate(5px, 0); }
-    100% { transform: translate(0, 0); }
+    25% { transform: translate(-5px, 5px); }
+    50% { transform: translate(5px, -5px); }
+    75% { transform: translate(-5px, 5px); }
+    100% { transform: translate(5px, -5px); }
 }
 
 .image-container {
@@ -41,9 +37,9 @@ header, main, footer {
 ::-moz-selection { /* Code for Firefox */
     color: rgba(255, 255, 255, 0);
     background: rgba(255, 255, 255, 0);
-  }
-  
-  ::selection {
+}
+
+::selection {
     color: rgba(255, 255, 255, 0);
     background: rgba(255, 255, 255, 0);
-  }
+}

@@ -1,0 +1,18 @@
+[
+    { "src": "001_00.png", "weight": 15.5 },
+    { "src": "001_01.png", "weight": 12.5 },
+    { "src": "001_03.png", "weight": 12.5 },
+    { "src": "001_05.png", "weight": 12.5 },
+    { "src": "003.png", "weight": 12.5 },
+    { "src": "004.png", "weight": 12.5 },
+    { "src": "012.png", "weight": 12.5 },
+    { "src": "013.png", "weight": 12.5 },
+    { "src": "015.png", "weight": 4 },
+    { "src": "016.png", "weight": 5.5 },
+    { "src": "020.png", "weight": 5 },
+    { "src": "021.png", "weight": 5 },
+    { "src": "049.png", "weight": 2 },
+    { "src": "056.png", "weight": 2 },
+    { "src": "073.png", "weight": 5 },
+    { "src": "129.png", "weight": 2 }
+]
