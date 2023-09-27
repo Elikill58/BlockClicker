@@ -1,0 +1,15 @@
+{
+    "id": "blockclicker",
+    "name": "BlockClicker",
+    "description": "Let people click on block",
+    "version": "1.0.0",
+    "url": "https://github.com/NeXoS-20/block-clicker",
+    "authors": [
+        "Elikill58"
+    ],
+    "azuriom_api": "1.0.0",
+    "providers": [
+        "\\Azuriom\\Plugin\\BlockClicker\\Providers\\BlockClickerServiceProvider",
+        "\\Azuriom\\Plugin\\BlockClicker\\Providers\\RouteServiceProvider"
+    ]
+}
