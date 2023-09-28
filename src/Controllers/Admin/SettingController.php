@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\BlockClicker\Controllers\Admin;
 
 use Azuriom\Http\Controllers\Controller;
+use Azuriom\Plugin\BlockClicker\Models\Blocks;
 
 class SettingController extends Controller {
     /**
@@ -10,8 +11,8 @@ class SettingController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        return view('blockclicker::admin.index');
+    public function index() {
+        $blocks = Blocks::all();
+        return view('blockclicker::admin.index', compact('blocks'));
     }
 }

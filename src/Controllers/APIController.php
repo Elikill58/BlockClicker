@@ -3,6 +3,8 @@
 namespace Azuriom\Plugin\BlockClicker\Controllers;
 
 use Azuriom\Http\Controllers\Controller;
+use Azuriom\Plugin\BlockClicker\Models\Blocks;
+use Azuriom\Plugin\BlockClicker\Models\Players;
 use Illuminate\Http\Request;
 
 class APIController extends Controller {
@@ -10,7 +12,9 @@ class APIController extends Controller {
     public function click(Request $request) {
         // vérifier le click
         return json_encode([
-            "clicked"
+            "clicked",
+            "blocks" => Blocks::all(),
+            "players" => Players::all()
         ]);
     }
 
