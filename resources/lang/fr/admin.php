@@ -9,6 +9,13 @@ return [
             "title" => "Modifier le block"
         ]
     ],
+    'players' => [
+        "list" => "Liste des joueurs",
+        "edit" => [
+            "title" => "Modifier le joueur"
+        ]
+    ],
     "required_click" => "Nombre de clique nécessaire",
-    "luck" => "Chance de l'avoir"
+    "luck" => "Chance de l'avoir",
+    "block" => "Block"
 ];

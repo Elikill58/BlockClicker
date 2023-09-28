@@ -4,6 +4,7 @@ namespace Azuriom\Plugin\BlockClicker\Controllers\Admin;
 
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\BlockClicker\Models\Blocks;
+use Azuriom\Plugin\BlockClicker\Models\Players;
 
 class SettingController extends Controller {
     /**
@@ -13,6 +14,7 @@ class SettingController extends Controller {
      */
     public function index() {
         $blocks = Blocks::all();
-        return view('blockclicker::admin.index', compact('blocks'));
+        $players = Players::all();
+        return view('blockclicker::admin.index', compact('blocks', 'players'));
     }
 }
