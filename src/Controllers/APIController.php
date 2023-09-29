@@ -4,7 +4,6 @@ namespace Azuriom\Plugin\BlockClicker\Controllers;
 
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Plugin\BlockClicker\Models\Blocks;
-use Azuriom\Plugin\BlockClicker\Models\Players;
 use Illuminate\Http\Request;
 
 class APIController extends Controller {
@@ -13,15 +12,19 @@ class APIController extends Controller {
         // vérifier le click
         return json_encode([
             "clicked",
-            "blocks" => Blocks::all(),
-            "players" => Players::all()
+            $request->session()->get("some")
         ]);
     }
 
     public function getRandom(Request $request) {
-        $blocks = json_decode(file_get_contents(plugin_asset("blockclicker", "blocks.json")), true);
+        $blocks = [];
+        foreach(Blocks::all() as $block) {
+            for($i = 0; $i < $block->luck; $i++) {
+                array_push($blocks, $block);
+            }
+        }
         $choosedBlock = $blocks[array_rand($blocks)];
-        // maintenant faut stocker l'info quelque part
+        $request->session()->put("some", $choosedBlock);
         return json_encode($choosedBlock);
     }
 }

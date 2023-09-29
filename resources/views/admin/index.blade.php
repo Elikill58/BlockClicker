@@ -6,7 +6,16 @@
     <div class="row" id="blockclicker">
         <div class="card shadow mb-4 col-6">
             <div class="card-body">
-                <h3>{{ trans('blockclicker::admin.blocks.list') }}</h3>
+                <div class="row">
+                    <div class="col-6 text-start">
+                        <h3>{{ trans('blockclicker::admin.blocks.list') }}</h3>
+                    </div>
+                    <div class="col-6 text-end">
+                        <a href="{{ route('blockclicker.admin.blocks.create') }}" class="btn btn-success">
+                            <i class="bi bi-save"></i> {{ trans('messages.actions.add') }}
+                        </a>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -51,7 +60,16 @@
         </div>
         <div class="card shadow mb-4 col-6">
             <div class="card-body">
-                <h3>{{ trans('blockclicker::admin.players.list') }}</h3>
+                <div class="row">
+                    <div class="col-6 text-start">
+                        <h3>{{ trans('blockclicker::admin.players.list') }}</h3>
+                    </div>
+                    <div class="col-6 text-end">
+                        <a href="{{ route('blockclicker.admin.players.store') }}" class="btn btn-success">
+                            <i class="bi bi-save"></i> {{ trans('messages.actions.add') }}
+                        </a>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>

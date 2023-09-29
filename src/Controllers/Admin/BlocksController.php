@@ -17,11 +17,16 @@ class BlocksController extends Controller {
     {
         return view('blockclicker::admin.blocks.show', compact('block'));
     }
+
+    public function create()
+    {
+        return view('blockclicker::admin.blocks.create');
+    }
     
     public function store(BlocksRequest $blockRequest) {
         Blocks::create($blockRequest->validated());
 
-        return redirect()->route('blockclicker.admin.index')
+        return to_route('blockclicker.admin.index')
             ->with('success', trans('blockclicker::admin.block.created'));
     }
 

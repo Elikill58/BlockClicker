@@ -37,7 +37,7 @@
         @enderror
     </div>
     <div class="mb-3">
-        <img src="{{ old('image', $block->image) }}" id="image-preview" alt="Preview">
+        <img src="{{ old('image', $block->image ?? '') }}" class="d-none" id="image-preview" alt="Preview">
     </div>
 </div>
 
@@ -54,6 +54,7 @@
             var base64 = await toBase64(document.getElementById('imageInput').files[0]);
             document.getElementById("image").value = base64;
             document.getElementById("image-preview").src = base64;
+            document.getElementById("image-preview").classList.remove("d-none");
         }
     </script>
 @endpush

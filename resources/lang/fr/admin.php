@@ -7,6 +7,9 @@ return [
         "list" => "Liste des blocks",
         "edit" => [
             "title" => "Modifier le block"
+        ],
+        "create" => [
+            "title" => "Créer un nouveau block"
         ]
     ],
     'players' => [
