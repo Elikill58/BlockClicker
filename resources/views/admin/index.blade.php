@@ -29,9 +29,7 @@
                             @forelse($blocks ?? [] as $block)
                                 <tr class="sortable-dropdown tag-parent" data-block-id="{{ $block->id }}">
                                     <th scope="row">
-                                        <div class="col-1">
-                                            <i class="bi bi-arrows-move sortable-handle"></i>
-                                        </div>
+                                        {{$block->id}}
                                     </th>
                                     <td>
                                         {{$block->name}}
@@ -83,9 +81,7 @@
                             @forelse($players ?? [] as $player)
                                 <tr class="sortable-dropdown tag-parent" data-block-id="{{ $player->id }}">
                                     <th scope="row">
-                                        <div class="col-1">
-                                            <i class="bi bi-arrows-move sortable-handle"></i>
-                                        </div>
+                                        {{$player->id}}
                                     </th>
                                     <td>
                                         {{$player->user_id}}
