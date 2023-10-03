@@ -29,5 +29,43 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-12">
+            <div class="card shadow mb-4">
+            <div class="card-header">
+                <h3>{{ trans('blockclicker::admin.settings.edit') }}</h3>
+            </div>
+                <div class="card-body">
+                    <form action="{{ route('blockclicker.admin.setting.update', null) }}" name="setting-form" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label class="form-label" for="serverIdInput">{{ trans('blockclicker::admin.server_id') }}</label>
+                            <select name="server_id" id="serverIdInput" class="form-control">
+                                @foreach($servers ?? [] as $srv)
+                                    <option value="{{ $srv->id }}" @if((setting("blockclicker.server_id") ?? 0) == $srv->id) selected @endif>
+                                        {{ $srv->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            @error('server_id')
+                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="bagSizeInput">{{ trans('blockclicker::admin.bag_size') }}</label>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="bagSizeInput"
+                                name="bag_size" value="{{ setting('bag_size') ?? 15 }}" required>
+
+                            @error('bag_size')
+                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> {{ trans('messages.actions.save') }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

@@ -23,8 +23,14 @@ return [
             "title" => "Modifier le joueur"
         ]
     ],
+    'settings' => [
+        "updated" => "Configuration mise à jour !",
+        "edit" => "Modifier la configuration"
+    ],
     "required_click" => "Nombre de clique nécessaire",
     "luck" => "Chance de l'avoir",
     "block" => "Block",
-    "amount" => "Quantité"
+    "amount" => "Quantité",
+    'bag_size' => "Taille du sac",
+    "server_id" => "Server"
 ];
