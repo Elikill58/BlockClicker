@@ -10,7 +10,7 @@ class BlocksController extends Controller {
 
     public function index() {
         $blocks = Blocks::all();
-        return view('blockclicker::admin.index', compact('blocks'));
+        return view('blockclicker::admin.blocks.index', compact('blocks'));
     }
 
     public function show(Blocks $block)

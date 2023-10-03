@@ -8,6 +8,11 @@
 
 @section('content')
     <div class="row" id="blockclicker">
+        <div class="alert alert-success alert-dismissible d-none" id="blockclicker-alert" role="alert">
+            <i class="bi bi-check-circle"></i>
+            <span id="blockclicker-message"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         <div class="image-container">
             <img style="display: none;" id="block-img" onclick="handleClick()">
         </div>
@@ -22,16 +27,30 @@
             var block = await rawResult.json();
             var img = document.getElementById("block-img");
             img.style.display = null;
-            img.src = "{{ plugin_asset('blockclicker', 'img/AAAAA') }}/".replace("AAAAA", block.src);
+            img.src = block.image;
         }
 
-        function handleClick() {
-            fetch("{{ route('blockclicker.click') }}");
+        var canClick = true;
+
+        async function handleClick() {
+            if(!canClick)
+                return;
+            canClick = false;
             document.getElementById("block-img").classList.add("shake");
             
             setTimeout(() => {
                 document.getElementById("block-img").classList.remove("shake");
+                canClick = true;
             }, 500);
+            const result = await (await fetch("{{ route('blockclicker.click') }}")).json();
+            if(result.result == "updated" || result.result == "created") {
+                document.getElementById("blockclicker-alert").classList.remove("d-none");
+                document.getElementById("blockclicker-message").textContent = (result.result == "updated" ? "{{ trans('blockclicker::public.block.updated') }}" : "{{ trans('blockclicker::public.block.created') }}");
+                setTimeout(() => {
+                    document.getElementById("blockclicker-alert").classList.add("d-none");
+                }, 2000);
+                nextBlock();
+            }
         }
 
         nextBlock();

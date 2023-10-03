@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\BlockClicker\Controllers\Admin;
 
 use Azuriom\Http\Controllers\Controller;
+use Azuriom\Plugin\BlockClicker\Models\Blocks;
 use Azuriom\Plugin\BlockClicker\Models\Players;
 use Azuriom\Plugin\BlockClicker\Requests\PlayersRequest;
 
@@ -10,7 +11,7 @@ class PlayersController extends Controller {
 
     public function index() {
         $players = Players::all();
-        return view('blockclicker::admin.index', compact('players'));
+        return view('blockclicker::admin.players.index', compact('players'));
     }
 
     public function show(Players $player)
@@ -27,7 +28,8 @@ class PlayersController extends Controller {
 
     public function edit(Players $player)
     {
-        return view('blockclicker::admin.players.edit', compact('player'));
+        $blocks = Blocks::all();
+        return view('blockclicker::admin.players.edit', compact('player', 'blocks'));
     }
 
     public function update(PlayersRequest $request, Players $player)

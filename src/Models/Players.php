@@ -4,6 +4,7 @@ namespace Azuriom\Plugin\BlockClicker\Models;
 
 use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\Traits\HasUser;
+use Azuriom\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Players extends Model {
@@ -35,7 +36,7 @@ class Players extends Model {
     /**
      * Get the user who created this ticket.
      */
-    public function author() {
+    public function user() {
         return $this->belongsTo(User::class, 'user_id');
     }
 

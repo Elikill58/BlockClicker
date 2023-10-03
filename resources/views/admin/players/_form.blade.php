@@ -10,7 +10,7 @@
         @enderror
     </div>
     <div class="mb-3">
-        <label class="form-label" for="blockInput">{{ trans('blockclicker::admin.block_id') }}</label>
+        <label class="form-label" for="blockInput">{{ trans('blockclicker::admin.block') }}</label>
         <select name="block_id" id="blockInput" class="form-control">
             @foreach($blocks as $block)
                 <option value="{{ $block->id }}" @if(isset($player->block_id) && $player->block_id == $block->id) selected @endif>
@@ -24,7 +24,7 @@
         @enderror
     </div>
     <div class="mb-3">
-        <label class="form-label" for="amountInput">{{ trans('messages.fields.amount') }}</label>
+        <label class="form-label" for="amountInput">{{ trans('blockclicker::admin.amount') }}</label>
         <input type="text" class="form-control @error('description') is-invalid @enderror" id="amountInput"
                name="amount" value="{{ old('amount', $player->amount ?? '') }}">
 
