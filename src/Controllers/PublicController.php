@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\BlockClicker\Controllers;
 
 use Azuriom\Http\Controllers\Controller;
+use Azuriom\Plugin\BlockClicker\Models\Players;
 
 class PublicController extends Controller {
     /**
@@ -10,8 +11,15 @@ class PublicController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        return view('blockclicker::public.index');
+    public function index() {
+        $players = Players::classement();
+        $auth = auth();
+        if($auth != null && $auth->user() != null) {
+            $userId = $auth->user()->getAuthIdentifier();
+            $myPlayers = Players::where("user_id", $userId)->get();
+        } else {
+            $myPlayers = null;
+        }
+        return view('blockclicker::public.index', compact('players', 'myPlayers'));
     }
 }

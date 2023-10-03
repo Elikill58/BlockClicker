@@ -58,7 +58,9 @@ class APIController extends Controller {
             $this->setSessionForBlock($request, $choosedBlock, 0);
         }
         return json_encode([
-            "id" => $choosedBlock->id
+            "id" => $choosedBlock->id,
+            "name" => $choosedBlock->name,
+            "image" => $choosedBlock->image
         ]);
     }
 
@@ -68,5 +70,20 @@ class APIController extends Controller {
             "click" => $click,
             "last_interact" => floor(microtime(true) * 1000)
         ]);
+    }
+
+    public function getAllMinedBlocks() {
+        $auth = auth();
+        if($auth != null && $auth->user() != null) {
+            $userId = $auth->user()->getAuthIdentifier();
+            $myPlayers = Players::where("user_id", $userId)->get();
+            foreach($myPlayers as $p) {
+                $p->block_name = $p->block->name;
+                unset($p->block);
+            }
+        } else {
+            $myPlayers = null;
+        }
+        return json_encode($myPlayers);
     }
 }

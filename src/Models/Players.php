@@ -6,6 +6,7 @@ use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\Traits\HasUser;
 use Azuriom\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Players extends Model {
 
@@ -42,5 +43,9 @@ class Players extends Model {
 
     public function block() {
         return $this->belongsTo(Blocks::class, 'block_id');
+    }
+
+    public static function classement() {
+        return DB::select("SELECT (SELECT name FROM Users WHERE user_id = blockclicker_players.user_id) as user, SUM(amount) as amount FROM blockclicker_players GROUP BY user_id ORDER BY amount;");
     }
 }

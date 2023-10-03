@@ -29,7 +29,7 @@
                         </thead>
                         <tbody class="sortable" id="games">
                             @forelse($players ?? [] as $player)
-                                <tr class="sortable-dropdown tag-parent" data-block-id="{{ $player->id }}">
+                                <tr class="sortable-dropdown tag-parent" data-player-id="{{ $player->id }}">
                                     <th scope="row">
                                         {{$player->id}}
                                     </th>
