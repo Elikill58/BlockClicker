@@ -46,6 +46,6 @@ class Players extends Model {
     }
 
     public static function classement() {
-        return DB::select("SELECT (SELECT name FROM Users WHERE user_id = blockclicker_players.user_id) as user, SUM(amount) as amount FROM blockclicker_players GROUP BY user_id ORDER BY amount;");
+        return DB::select("SELECT (SELECT name FROM Users WHERE id = blockclicker_players.user_id) as user, SUM(amount) as amount FROM blockclicker_players GROUP BY user_id ORDER BY amount DESC;");
     }
 }
