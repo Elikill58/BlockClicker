@@ -19,6 +19,7 @@
                     <h3>{{ trans('blockclicker::public.bag.index') }}</h3>
                 </div>
                 <div class="card-body">
+                    <button onclick="send()" class="btn btn-success" disabled id="sendButton">{{ trans('blockclicker::public.send') }}</button>
                     @if($myPlayers == null)
                     <div>
                         {{ trans('blockclicker::public.need_auth') }}
@@ -111,7 +112,7 @@
             setTimeout(() => {
                 document.getElementById("block-img").classList.remove("shake");
                 canClick = true;
-            }, 500);
+            }, parseInt('{{ setting("blockclicker.time_cooldown") }}'));
             const result = await (await fetch("{{ route('blockclicker.click') }}")).json();
             if(result.result == "updated" || result.result == "created") {
                 document.getElementById("blockclicker-alert").classList.remove("d-none");
@@ -120,12 +121,15 @@
                     document.getElementById("blockclicker-alert").classList.add("d-none");
                 }, 3000);
                 nextBlock();
+            } else if(result.result == "nothing") {
+                nextBlock();
             }
         }
 
         async function update() {
             var body = document.getElementById("myPlayers");
             const result = await (await fetch("{{ route('blockclicker.mined') }}")).json();
+            document.getElementById("sendButton").disabled = result.length == 0;
             body.innerHTML = "";
             for(var line of result) {
                 body.innerHTML += `
@@ -134,6 +138,11 @@
                         <span class="badge badge-blockclicker">` + line.amount + `</span>
                     </div>`;
             }
+        }
+
+        async function send() {
+            await fetch("{{ route('blockclicker.send') }}");
+            update(); // should be empty
         }
 
         nextBlock();

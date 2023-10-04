@@ -3,7 +3,7 @@
 namespace Azuriom\Plugin\BlockClicker\Controllers;
 
 use Azuriom\Http\Controllers\Controller;
-use Azuriom\Models\Setting;
+use Azuriom\Models\Server;
 use Azuriom\Plugin\BlockClicker\Models\Blocks;
 use Azuriom\Plugin\BlockClicker\Models\Players;
 use Illuminate\Http\Request;
@@ -12,6 +12,11 @@ class APIController extends Controller {
 
     public function click(Request $request) {
         $actualClicks = $request->session()->get("blockclicker_actual");
+        if($actualClicks == null) {
+            return json_encode([
+                "result" => "nothing"
+            ]);
+        }
         $lastInteract = $actualClicks["last_interact"];
         $nowInteract = floor(microtime(true) * 1000);
         if($lastInteract + (setting("blockclicker.time_cooldown") ?? 100) > $nowInteract) {
@@ -94,5 +99,25 @@ class APIController extends Controller {
             $myPlayers = null;
         }
         return json_encode($myPlayers);
+    }
+
+    public function sendToServer() {
+        $serverId = setting("blockclicker.server_id");
+        if($serverId == null || $serverId == "")
+            return;
+        $auth = auth();
+        if($auth == null || $auth->user() == null) 
+            return;
+        $user = $auth->user();
+        $userId = $auth->user()->getAuthIdentifier();
+        $srv = Server::where("id", $serverId)->first();
+        $players = Players::where("user_id", $userId)->get();
+        $commands = [];
+        foreach($players as $player) {
+            array_push($commands, "give " . $user->name . " " . $player->block->minecraft_id . " " . $player->amount);
+        }
+        $srv->bridge()->sendCommands($commands, $user, true);
+
+        Players::where("user_id", $userId)->delete();
     }
 }
