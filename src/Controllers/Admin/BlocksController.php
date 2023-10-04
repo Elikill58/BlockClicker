@@ -13,13 +13,7 @@ class BlocksController extends Controller {
         return view('blockclicker::admin.blocks.index', compact('blocks'));
     }
 
-    public function show(Blocks $block)
-    {
-        return view('blockclicker::admin.blocks.show', compact('block'));
-    }
-
-    public function create()
-    {
+    public function create() {
         return view('blockclicker::admin.blocks.create');
     }
     
@@ -30,13 +24,11 @@ class BlocksController extends Controller {
             ->with('success', trans('blockclicker::admin.block.created'));
     }
 
-    public function edit(Blocks $block)
-    {
+    public function edit(Blocks $block) {
         return view('blockclicker::admin.blocks.edit', compact('block'));
     }
 
-    public function update(BlocksRequest $request, Blocks $block)
-    {
+    public function update(BlocksRequest $request, Blocks $block) {
         $block->update($request->validated());
         return redirect()->route('blockclicker.admin.index')
             ->with('success', trans('blockclicker::admin.blocks.updated'));
