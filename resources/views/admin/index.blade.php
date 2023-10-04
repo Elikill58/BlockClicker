@@ -49,7 +49,7 @@
                             @enderror
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="bagSizeInput">{{ trans('blockclicker::admin.bag_size') }}</label>
+                            <label class="form-label" for="bagSizeInput">{{ trans('blockclicker::admin.default_bag_size') }}</label>
                             <input type="text" class="form-control @error('bag_size') is-invalid @enderror" id="bagSizeInput"
                                 name="bag_size" value="{{ setting('bag_size') ?? 15 }}" required>
 

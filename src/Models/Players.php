@@ -47,6 +47,14 @@ class Players extends Model {
         return Mineds::where("player_id", $this->id)->get();
     }
 
+    public function bagSizeUsed() {
+        $mineds = $this->mineds();
+        $i = 0;
+        foreach($mineds as $m)
+            $i += $m->amount;
+        return $i;
+    }
+
     public static function classement() {
         return Players::orderBy("amount_monthly", "desc")->limit(100)->get();
     }

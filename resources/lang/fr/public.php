@@ -12,6 +12,6 @@ return [
         "index" => "Classement"
     ],
     "bag" => [
-        "index" => "Mon panier"
+        "index" => "Mon sac"
     ]
 ];

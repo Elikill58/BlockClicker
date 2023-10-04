@@ -16,10 +16,20 @@
         <div class="col-12 col-sm-6">
             <div class="card mb-2">
                 <div class="card-header">
-                    <h3>{{ trans('blockclicker::public.bag.index') }}</h3>
+                    <div class="row">
+                        <div class="col-6 text-start">
+                            <h3>{{ trans('blockclicker::public.bag.index') }}</h3>
+                        </div>
+                        <div class="col-6 text-end">
+                            @if($myPlayers != null)
+                            (<span id="bagUsed">{{ $myPlayers->bagSizeUsed() }}</span>/<span id="bagSize">{{ intval(setting('blockclicker.bag_size') ?? '10') + $myPlayers->bag_size }}</span>)
+                            @endif
+                        </div>
+                    </div>
+
                 </div>
                 <div class="card-body">
-                    <button onclick="send()" class="btn btn-success" disabled id="sendButton">{{ trans('blockclicker::public.send') }}</button>
+                    <button onclick="send()" class="btn btn-success mt-1" disabled id="sendButton">{{ trans('blockclicker::public.send') }}</button>
                     @if($myPlayers == null)
                     <div>
                         {{ trans('blockclicker::public.need_auth') }}
@@ -27,10 +37,12 @@
                     @else
                     <div class="d-flex" id="myPlayers">
                         @foreach($myPlayers->mineds() as $mined)
-                            <div class="col-2 text-end">
-                                <img src="{{$mined->block->image}}" style="width: -webkit-fill-available;">
-                                <span class="badge badge-blockclicker">{{ $mined->amount }}</span>
-                            </div>
+                            @if($mined->amount > 0)
+                                <div class="col-2 text-end">
+                                    <img src="{{$mined->block->image}}" style="width: -webkit-fill-available;">
+                                    <span class="badge badge-blockclicker">{{ $mined->amount }}</span>
+                                </div>
+                            @endif
                         @endforeach
                     </div>
                     @endif
@@ -131,13 +143,18 @@
             const result = await (await fetch("{{ route('blockclicker.mined') }}")).json();
             document.getElementById("sendButton").disabled = result.length == 0;
             body.innerHTML = "";
+            var totalAmount = 0;
             for(var line of result) {
+                if(line.amount == 0)
+                    continue;
                 body.innerHTML += `
                     <div class="col-2 text-end">
                         <img src="` + line.block_image + `" style="width: -webkit-fill-available;">
                         <span class="badge badge-blockclicker">` + line.amount + `</span>
                     </div>`;
+                totalAmount += line.amount;
             }
+            document.getElementById("bagUsed").textContent = totalAmount;
         }
 
         async function send() {

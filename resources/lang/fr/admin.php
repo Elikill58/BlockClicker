@@ -35,8 +35,8 @@ return [
     "amount" => "Quantité",
     "amount_reward" => "Quantité récupéré",
     "amount_monthly" => "Quantité mensuelle",
-    'bag_size' => "Taille du sac",
-    "default_bag_size" => "Taille par défaut",
+    'bag_size' => "Taille supplémentaire du sac",
+    "default_bag_size" => "Taille du sac par défaut",
     "server_id" => "Server",
     "minecraft_id" => "ID utilisé par Minecraft",
     "time_cooldown" => "Temps (en millisecondes) minimum entre 2 clics"

@@ -128,6 +128,8 @@ class APIController extends Controller {
         $player = Players::where("user_id", $userId)->first();
         $commands = [];
         foreach($player->mineds() as $mined) {
+            if($mined->amount == 0)
+                continue;
             array_push($commands, "give " . $user->name . " " . $mined->block->minecraft_id . " " . $mined->amount);
             $mined->amount_reward += $mined->amount;
             $mined->amount = 0;
