@@ -15,8 +15,8 @@ class PlayersRequest extends FormRequest {
     {
         return [
             'user_id' => ['required', 'exists:users,id'],
-            'block_id' => ['required', 'exists:blockclicker_block,id'],
-            'amount' => ['required', 'integer']
+            'amount_monthly' => ['required', 'integer'],
+            'bag_size' => ['required', 'integer']
         ];
     }
 }

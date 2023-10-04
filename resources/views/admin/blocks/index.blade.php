@@ -47,12 +47,9 @@
                                         {{$block->luck}}
                                     </td>
                                     <td>
-                                        <a href="{{ route('blockclicker.admin.blocks.show', $block) }}" class="mx-1"
-                                            title="{{ trans('messages.actions.show') }}" data-toggle="tooltip"><i
-                                                class="bi bi-eye-fill"></i></a>
                                         <a href="{{ route('blockclicker.admin.blocks.edit', $block) }}" class="mx-1"
                                             title="{{ trans('messages.actions.edit') }}" data-toggle="tooltip"><i
-                                                class="bi bi-pen-fill"></i></a>
+                                                class="bi bi-pencil-square"></i></a>
                                         <a href="{{ route('blockclicker.admin.blocks.destroy', $block) }}" class="mx-1"
                                             title="{{ trans('messages.actions.delete') }}" data-toggle="tooltip"
                                             data-confirm="delete"><i class="bi bi-trash-fill"></i></a>
@@ -60,7 +57,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3">Vous n'avez pas de block</td>
+                                    <td colspan="6">Vous n'avez pas de block</td>
                                 </tr>
                             @endforelse
                         </tbody>

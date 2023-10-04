@@ -3,9 +3,10 @@
 namespace Azuriom\Plugin\BlockClicker\Models;
 
 use Azuriom\Models\Traits\HasTablePrefix;
+use Azuriom\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
-class Blocks extends Model {
+class Mineds extends Model {
 
     use HasTablePrefix;
 
@@ -21,14 +22,26 @@ class Blocks extends Model {
      *
      * @var array
      */
-    protected $fillable = ['id', 'name', 'minecraft_id', 'image', 'required_click', 'luck'];
+    protected $fillable = ['id', 'player_id', 'block_id', 'amount', 'amount_reward'];
+        
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
     protected $casts = [
-        'required_click' => 'integer',
-        'luck' => 'integer'
+        'amount' => 'integer',
+        'amount_reward' => 'integer'
     ];
+
+    /**
+     * Get the user who created this ticket.
+     */
+    public function player() {
+        return $this->belongsTo(User::class, 'player_id');
+    }
+
+    public function block() {
+        return $this->belongsTo(Blocks::class, 'block_id');
+    }
 }

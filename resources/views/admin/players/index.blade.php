@@ -10,11 +10,6 @@
                     <div class="col-6 text-start">
                         <h3>{{ trans('blockclicker::admin.players.list') }}</h3>
                     </div>
-                    <div class="col-6 text-end">
-                        <a href="{{ route('blockclicker.admin.players.store') }}" class="btn btn-success">
-                            <i class="bi bi-save"></i> {{ trans('messages.actions.add') }}
-                        </a>
-                    </div>
                 </div>
                 <div class="table-responsive">
                     <table class="table">
@@ -22,8 +17,8 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">{{ trans('messages.fields.name') }}</th>
-                            <th scope="col">{{ trans('blockclicker::admin.block') }}</th>
-                            <th scope="col">{{ trans('blockclicker::admin.amount') }}</th>
+                            <th scope="col">{{ trans('blockclicker::admin.amount_monthly') }}</th>
+                            <th scope="col">{{ trans('blockclicker::admin.bag_size') }}</th>
                             <th scope="col">{{ trans('messages.fields.action') }}</th>
                         </tr>
                         </thead>
@@ -37,18 +32,19 @@
                                         {{$player->user->name}}
                                     </td>
                                     <td>
-                                        {{$player->block->name}}
+                                        {{$player->amount_monthly}}
                                     </td>
                                     <td>
-                                        {{$player->amount}}
+                                        @if($player->bag_size == 0)
+                                            {{ trans('blockclicker::admin.default_bag_size') }}
+                                        @else
+                                            {{$player->bag_size}}
+                                        @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('blockclicker.admin.players.show', $player) }}" class="mx-1"
-                                            title="{{ trans('messages.actions.show') }}" data-toggle="tooltip"><i
-                                                class="bi bi-eye-fill"></i></a>
                                         <a href="{{ route('blockclicker.admin.players.edit', $player) }}" class="mx-1"
                                             title="{{ trans('messages.actions.edit') }}" data-toggle="tooltip"><i
-                                                class="bi bi-pen-fill"></i></a>
+                                                class="bi bi-pencil-square"></i></a>
                                         <a href="{{ route('blockclicker.admin.players.destroy', $player) }}" class="mx-1"
                                             title="{{ trans('messages.actions.delete') }}" data-toggle="tooltip"
                                             data-confirm="delete"><i class="bi bi-trash-fill"></i></a>
@@ -56,7 +52,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3">Aucun joueur n'a joué</td>
+                                    <td colspan="5">Aucun joueur n'a joué</td>
                                 </tr>
                             @endforelse
                         </tbody>

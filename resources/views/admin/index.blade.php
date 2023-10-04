@@ -22,9 +22,6 @@
                     <p>
                         {{ trans('blockclicker::admin.players.count', ['count' => count($players)]) }}
                         <a href="{{ route('blockclicker.admin.players.index') }}" class="btn btn-info">Voir</a>
-                        <a href="{{ route('blockclicker.admin.players.create') }}" class="btn btn-success">
-                            <i class="bi bi-save"></i> {{ trans('messages.actions.add') }}
-                        </a>
                     </p>
                 </div>
             </div>

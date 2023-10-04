@@ -6,7 +6,6 @@ use Azuriom\Models\Traits\HasTablePrefix;
 use Azuriom\Models\Traits\HasUser;
 use Azuriom\Models\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 class Players extends Model {
 
@@ -25,15 +24,18 @@ class Players extends Model {
      *
      * @var array
      */
-    protected $fillable = ['id', 'user_id', 'block_id', 'amount'];
+    protected $fillable = ['id', 'user_id', 'amount_monthly', 'bag_size'];
     
     /**
-     * The user key associated with this model.
+     * The attributes that should be cast to native types.
      *
-     * @var string
+     * @var array
      */
-    protected $userKey = 'user_id';
-
+    protected $casts = [
+        'amount_monthly' => 'integer',
+        'bag_size' => 'integer'
+    ];
+    
     /**
      * Get the user who created this ticket.
      */
@@ -41,11 +43,11 @@ class Players extends Model {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function block() {
-        return $this->belongsTo(Blocks::class, 'block_id');
+    public function mineds() {
+        return Mineds::where("player_id", $this->id)->get();
     }
 
     public static function classement() {
-        return DB::select("SELECT (SELECT name FROM Users WHERE id = blockclicker_players.user_id) as user, SUM(amount) as amount FROM blockclicker_players GROUP BY user_id ORDER BY amount DESC;");
+        return Players::orderBy("amount_monthly", "desc")->limit(100)->get();
     }
 }

@@ -26,10 +26,10 @@
                     </div>
                     @else
                     <div class="d-flex" id="myPlayers">
-                        @foreach($myPlayers ?? [] as $player)
+                        @foreach($myPlayers->mineds() as $mined)
                             <div class="col-2 text-end">
-                                <img src="{{$player->block->image}}" style="width: -webkit-fill-available;">
-                                <span class="badge badge-blockclicker">{{ $player->amount }}</span>
+                                <img src="{{$mined->block->image}}" style="width: -webkit-fill-available;">
+                                <span class="badge badge-blockclicker">{{ $mined->amount }}</span>
                             </div>
                         @endforeach
                     </div>
@@ -47,7 +47,7 @@
                             <tr>
                                 <th scope="col">{{ trans('blockclicker::public.rank.index') }}</th>
                                 <th scope="col">{{ trans('messages.fields.name') }}</th>
-                                <th scope="col">{{ trans('blockclicker::admin.amount') }}</th>
+                                <th scope="col">{{ trans('blockclicker::admin.amount_monthly') }}</th>
                             </tr>
                             </thead>
                             <tbody class="sortable" id="players">
@@ -58,10 +58,10 @@
                                             {{$i++}}
                                         </th>
                                         <th>
-                                            {{$player->user}}
+                                            {{$player->user->name}}
                                         </th>
                                         <td>
-                                            {{$player->amount}}
+                                            {{$player->amount_monthly}}
                                         </td>
                                     </tr>
                                 @empty

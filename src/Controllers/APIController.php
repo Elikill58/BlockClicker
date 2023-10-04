@@ -5,6 +5,7 @@ namespace Azuriom\Plugin\BlockClicker\Controllers;
 use Azuriom\Http\Controllers\Controller;
 use Azuriom\Models\Server;
 use Azuriom\Plugin\BlockClicker\Models\Blocks;
+use Azuriom\Plugin\BlockClicker\Models\Mineds;
 use Azuriom\Plugin\BlockClicker\Models\Players;
 use Illuminate\Http\Request;
 
@@ -29,19 +30,30 @@ class APIController extends Controller {
         if($click >= $block->required_click) {
             $request->session()->remove("blockclicker_actual");
             $userId = auth()->user()->getAuthIdentifier();
-            $players = Players::where("user_id", $userId)->where("block_id", $block->id)->get();
-            if(count($players) == 0) { // first time break this block
-                Players::create([
+            $player = Players::where("user_id", $userId)->first();
+            if($player == null) { // just create one
+                $player = Players::create([
                     "user_id" => $userId,
+                    "amount_monthly" => 0,
+                    "bag_size" => 0
+                ]);
+            }
+            $mineds = Mineds::where("player_id", $player->id)->where("block_id", $block->id)->get();
+            if(count($mineds) == 0) { // first time break this block
+                Mineds::create([
+                    "player_id" => $player->id,
                     "block_id" => $block->id,
-                    "amount" => 1
+                    "amount" => 1,
+                    "amount_reward" => 0
                 ]);
                 return json_encode([
                     "result" => "created"
                 ]);
             } else { // already get it
-                $player = $players[0];
-                $player->amount++;
+                $mined = $mineds[0];
+                $mined->amount++;
+                $mined->update();
+                $player->amount_monthly++;
                 $player->update();
                 return json_encode([
                     "result" => "updated"
@@ -87,18 +99,20 @@ class APIController extends Controller {
 
     public function getAllMinedBlocks() {
         $auth = auth();
+        $mineds = [];
         if($auth != null && $auth->user() != null) {
             $userId = $auth->user()->getAuthIdentifier();
-            $myPlayers = Players::where("user_id", $userId)->get();
-            foreach($myPlayers as $p) {
-                $p->block_name = $p->block->name;
-                $p->block_image = $p->block->image;
-                unset($p->block);
+            $myPlayers = Players::where("user_id", $userId)->first();
+            foreach($myPlayers->mineds() as $mined) {
+                array_push($mineds, [
+                    "block_name" => $mined->block->name,
+                    "block_image" => $mined->block->image,
+                    "amount" => $mined->amount,
+                    "amount_reward" => $mined->amount_reward
+                ]);
             }
-        } else {
-            $myPlayers = null;
         }
-        return json_encode($myPlayers);
+        return json_encode($mineds);
     }
 
     public function sendToServer() {
@@ -111,13 +125,14 @@ class APIController extends Controller {
         $user = $auth->user();
         $userId = $auth->user()->getAuthIdentifier();
         $srv = Server::where("id", $serverId)->first();
-        $players = Players::where("user_id", $userId)->get();
+        $player = Players::where("user_id", $userId)->first();
         $commands = [];
-        foreach($players as $player) {
-            array_push($commands, "give " . $user->name . " " . $player->block->minecraft_id . " " . $player->amount);
+        foreach($player->mineds() as $mined) {
+            array_push($commands, "give " . $user->name . " " . $mined->block->minecraft_id . " " . $mined->amount);
+            $mined->amount_reward += $mined->amount;
+            $mined->amount = 0;
+            $mined->update();
         }
         $srv->bridge()->sendCommands($commands, $user, true);
-
-        Players::where("user_id", $userId)->delete();
     }
 }
