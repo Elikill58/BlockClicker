@@ -79,6 +79,7 @@ class APIController extends Controller {
             $myPlayers = Players::where("user_id", $userId)->get();
             foreach($myPlayers as $p) {
                 $p->block_name = $p->block->name;
+                $p->block_image = $p->block->image;
                 unset($p->block);
             }
         } else {

@@ -10,6 +10,15 @@
         @enderror
     </div>
     <div class="mb-3">
+        <label class="form-label" for="minecraftIdInput">{{ trans('blockclicker::admin.minecraft_id') }}</label>
+        <input type="text" class="form-control @error('minecraft_id') is-invalid @enderror" id="minecraftIdInput"
+               name="minecraft_id" value="{{ old('minecraft_id', $block->minecraft_id ?? '') }}" required>
+
+        @error('minecraft_id')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+    </div>
+    <div class="mb-3">
         <label class="form-label" for="requiredClickInput">{{ trans('blockclicker::admin.required_click') }}</label>
         <input type="text" class="form-control @error('description') is-invalid @enderror" id="requiredClickInput"
                name="required_click" value="{{ old('required_click', $block->required_click ?? '') }}">
@@ -31,13 +40,17 @@
         <label class="form-label" for="imageInput">{{ trans('messages.fields.image') }}</label>
         <input type="file" class="form-control @error('image') is-invalid @enderror" id="imageInput"
                 name="imageFake" onchange="update64File()">
-        <input type="hidden" name="image" id="image">
+        <input type="hidden" name="image" id="image" value="{{ old('image', $block->image ?? '') }}">
         @error('image')
         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
         @enderror
     </div>
     <div class="mb-3">
-        <img src="{{ old('image', $block->image ?? '') }}" class="d-none" id="image-preview" alt="Preview">
+        @if(isset($block->image) && !empty($block->image))
+            <img src="{{ old('image', $block->image ?? '') }}" id="image-preview" alt="Preview">
+        @else
+            <img class="d-none" id="image-preview" alt="Preview">
+        @endif
     </div>
 </div>
 

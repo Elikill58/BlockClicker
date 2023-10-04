@@ -21,5 +21,5 @@ class Blocks extends Model {
      *
      * @var array
      */
-    protected $fillable = ['id', 'name', 'image', 'required_click', 'luck'];
+    protected $fillable = ['id', 'name', 'minecraft_id', 'image', 'required_click', 'luck'];
 }

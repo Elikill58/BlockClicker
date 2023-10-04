@@ -24,27 +24,13 @@
                         {{ trans('blockclicker::public.need_auth') }}
                     </div>
                     @else
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th scope="col">{{ trans('blockclicker::admin.block') }}</th>
-                                <th scope="col">{{ trans('blockclicker::admin.amount') }}</th>
-                            </tr>
-                            </thead>
-                            <tbody class="sortable" id="myPlayers">
-                                @foreach($myPlayers ?? [] as $player)
-                                    <tr class="sortable-dropdown tag-parent">
-                                        <th>
-                                            {{$player->block->name}}
-                                        </th>
-                                        <td>
-                                            {{$player->amount}}
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                    <div class="d-flex" id="myPlayers">
+                        @foreach($myPlayers ?? [] as $player)
+                            <div class="col-2 text-end">
+                                <img src="{{$player->block->image}}" style="width: -webkit-fill-available;">
+                                <span class="badge badge-blockclicker">{{ $player->amount }}</span>
+                            </div>
+                        @endforeach
                     </div>
                     @endif
                 </div>
@@ -94,7 +80,7 @@
                 {{ trans('blockclicker::public.need_auth') }}
             </div>
             @else
-            <div class="image-container" style="max-width: -webkit-fill-available;">
+            <div class="image-container" style="max-width: -webkit-fill-available; height: auto;">
                 <img style="display: none; max-width: -webkit-fill-available; height: auto;" id="block-img" onclick="handleClick()">
             </div>
             @endif
@@ -143,14 +129,10 @@
             body.innerHTML = "";
             for(var line of result) {
                 body.innerHTML += `
-                    <tr class="sortable-dropdown tag-parent">
-                        <th>
-                            ` + line.block_name + `
-                        </th>
-                        <td>
-                            ` + line.amount + `
-                        </td>
-                    </tr>`;
+                    <div class="col-2 text-end">
+                        <img src="` + line.block_image + `" style="width: -webkit-fill-available;">
+                        <span class="badge badge-blockclicker">` + line.amount + `</span>
+                    </div>`;
             }
         }
 

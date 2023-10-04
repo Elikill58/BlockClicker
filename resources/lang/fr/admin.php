@@ -9,6 +9,7 @@ return [
     'blocks' => [
         "count" => ":count blocks",
         "list" => "Liste des blocks",
+        "updated" => "Block modifié !",
         "edit" => [
             "title" => "Modifier le block"
         ],
@@ -32,5 +33,6 @@ return [
     "block" => "Block",
     "amount" => "Quantité",
     'bag_size' => "Taille du sac",
-    "server_id" => "Server"
+    "server_id" => "Server",
+    "minecraft_id" => "ID utilisé par Minecraft"
 ];

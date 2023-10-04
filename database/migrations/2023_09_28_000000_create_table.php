@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('blockclicker_blocks', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('minecraft_id');
             $table->text('image');
             $table->unsignedInteger('required_click');
             $table->unsignedInteger('luck');

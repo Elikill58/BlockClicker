@@ -22,6 +22,7 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">{{ trans('messages.fields.name') }}</th>
+                            <th scope="col">{{ trans('blockclicker::admin.minecraft_id') }}</th>
                             <th scope="col">{{ trans('blockclicker::admin.required_click') }}</th>
                             <th scope="col">{{ trans('blockclicker::admin.luck') }}</th>
                             <th scope="col">{{ trans('messages.fields.action') }}</th>
@@ -35,6 +36,9 @@
                                     </th>
                                     <td>
                                         {{$block->name}}
+                                    </td>
+                                    <td>
+                                        {{$block->minecraft_id}}
                                     </td>
                                     <td>
                                         {{$block->required_click}}
