@@ -132,7 +132,7 @@
                 document.getElementById("blockclicker-message").textContent = (result.result == "updated" ? "{{ trans('blockclicker::public.block.updated') }}" : "{{ trans('blockclicker::public.block.created') }}");
                 setTimeout(() => {
                     document.getElementById("blockclicker-alert").classList.add("d-none");
-                }, 2000);
+                }, 3000);
                 nextBlock();
             }
         }
