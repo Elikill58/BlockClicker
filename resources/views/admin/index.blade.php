@@ -53,10 +53,19 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="bagSizeInput">{{ trans('blockclicker::admin.bag_size') }}</label>
-                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="bagSizeInput"
+                            <input type="text" class="form-control @error('bag_size') is-invalid @enderror" id="bagSizeInput"
                                 name="bag_size" value="{{ setting('bag_size') ?? 15 }}" required>
 
                             @error('bag_size')
+                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="timeCooldownInput">{{ trans('blockclicker::admin.time_cooldown') }}</label>
+                            <input type="text" class="form-control @error('time_cooldown') is-invalid @enderror" id="timeCooldownInput"
+                                name="time_cooldown" value="{{ setting('time_cooldown') ?? 100 }}" required>
+
+                            @error('time_cooldown')
                             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
                         </div>

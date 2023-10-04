@@ -34,5 +34,6 @@ return [
     "amount" => "Quantité",
     'bag_size' => "Taille du sac",
     "server_id" => "Server",
-    "minecraft_id" => "ID utilisé par Minecraft"
+    "minecraft_id" => "ID utilisé par Minecraft",
+    "time_cooldown" => "Temps (en millisecondes) minimum entre 2 clics"
 ];

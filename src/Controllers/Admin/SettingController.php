@@ -25,11 +25,13 @@ class SettingController extends Controller {
     public function save(Request $request) {
         $this->validate($request, [
             'server_id' => ['nullable', 'exists:servers,id'],
-            'bag_size' => ['required', 'integer']
+            'bag_size' => ['required', 'integer'],
+            'time_cooldown' => ['required', 'integer']
         ]);
         Setting::updateSettings([
             'blockclicker.server_id' => $request->input('server_id'),
-            'blockclicker.bag_size' => $request->input('bag_size')
+            'blockclicker.bag_size' => $request->input('bag_size'),
+            'blockclicker.time_cooldown' => $request->input('time_cooldown')
         ]);
         return redirect()->route('blockclicker.admin.index')->with('success', trans('blockclicker::admin.settings.updated'));
     }

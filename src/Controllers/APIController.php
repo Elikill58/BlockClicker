@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\BlockClicker\Controllers;
 
 use Azuriom\Http\Controllers\Controller;
+use Azuriom\Models\Setting;
 use Azuriom\Plugin\BlockClicker\Models\Blocks;
 use Azuriom\Plugin\BlockClicker\Models\Players;
 use Illuminate\Http\Request;
@@ -11,6 +12,13 @@ class APIController extends Controller {
 
     public function click(Request $request) {
         $actualClicks = $request->session()->get("blockclicker_actual");
+        $lastInteract = $actualClicks["last_interact"];
+        $nowInteract = floor(microtime(true) * 1000);
+        if($lastInteract + (setting("blockclicker.time_cooldown") ?? 100) > $nowInteract) {
+            return json_encode([
+                "result" => "not_finished"
+            ]);
+        }
         $block = $actualClicks["block"];
         $click = $actualClicks["click"] + 1;
         if($click >= $block->required_click) {
