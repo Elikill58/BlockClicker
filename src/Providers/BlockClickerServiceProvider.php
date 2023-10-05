@@ -61,7 +61,7 @@ class BlockClickerServiceProvider extends BasePluginServiceProvider
             'blockclicker' => [
                 'name'       => trans('blockclicker::admin.title'), // Traduction du nom de l'onglet
                 'permission' => 'blockclicker.admin',
-                'icon'       => 'bi bi-hammer', // Icône FontAwesome
+                'icon'       => 'bi bi-box', // Icône FontAwesome
                 'route'      => 'blockclicker.admin.index', // Route de la page
             ],
         ];
