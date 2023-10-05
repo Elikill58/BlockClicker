@@ -34,32 +34,16 @@
     animation: shake 0.5s ease-in-out;
 }
 
-::-moz-selection { /* Code for Firefox */
-    color: rgba(255, 255, 255, 0);
-    background: rgba(255, 255, 255, 0);
-}
-
-::selection {
-    color: rgba(255, 255, 255, 0);
-    background: rgba(255, 255, 255, 0);
-}
-
 .badge-blockclicker {
-    --bs-badge-padding-x: 0.65em;
-    --bs-badge-padding-y: 0.35em;
-    --bs-badge-font-size: 0.75em;
-    --bs-badge-font-weight: 700;
-    --bs-badge-color: #fff;
-    --bs-badge-border-radius: var(--bs-border-radius);
     display: inline-block;
-    padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x);
-    font-size: var(--bs-badge-font-size);
-    font-weight: var(--bs-badge-font-weight);
+    padding: 0.35em 0.65em;
+    font-size: 0.75em;
+    font-weight: 700;
     line-height: 1;
-    color: var(--bs-badge-color);
+    color: #fff;
     text-align: center;
     white-space: nowrap;
     vertical-align: baseline;
-    border-radius: var(--bs-badge-border-radius);
+    border-radius: var(--bs-border-radius);
     background-color: var(--bs-secondary-bg);
 }

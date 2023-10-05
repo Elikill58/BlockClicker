@@ -7,11 +7,6 @@
 @endpush
 
 @section('content')
-    <!--div class="alert alert-success alert-dismissible d-none" id="blockclicker-alert" role="alert">
-        <i class="bi bi-check-circle"></i>
-        <span id="blockclicker-message"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div-->
     <div class="row" id="blockclicker">
         <div class="col-12 col-sm-6">
             <div class="card mb-2">
@@ -29,12 +24,12 @@
 
                 </div>
                 <div class="card-body">
-                    <button onclick="send()" class="btn btn-success mt-1" disabled id="sendButton">{{ trans('blockclicker::public.send') }}</button>
                     @if($myPlayers == null)
                     <div>
                         {{ trans('blockclicker::public.need_auth') }}
                     </div>
                     @else
+                    <button onclick="send()" class="btn btn-success mt-1" disabled id="sendButton">{{ trans('blockclicker::public.send') }}</button>
                     <div class="d-flex" id="myPlayers">
                         @foreach($myPlayers->mineds() as $mined)
                             @if($mined->amount > 0)
@@ -45,12 +40,12 @@
                             @endif
                         @endforeach
                     </div>
-                    @endif
                     <div class="d-flex my-2" style="align-items: center;">
                         <div style="width: 50px; min-height: 20px; padding: 10px; border: 1px solid #aaaaaa;" id="trash-img" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
                         <div class="d-none" id="trash-manager"></div>
                         <a href="#blockclicker" onclick="trash()"><i class="bi bi-trash-fill mx-1"></i></a>
                     </div>
+                    @endif
                 </div>
             </div>
             <div class="card">
