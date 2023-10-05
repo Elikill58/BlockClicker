@@ -12,6 +12,7 @@ return [
         "index" => "Classement"
     ],
     "bag" => [
-        "index" => "Mon sac"
+        "index" => "Mon sac",
+        "full" => "Votre sac est entièrement rempli.",
     ]
 ];

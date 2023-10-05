@@ -22,7 +22,7 @@
                         </div>
                         <div class="col-6 text-end">
                             @if($myPlayers != null)
-                            (<span id="bagUsed">{{ $myPlayers->bagSizeUsed() }}</span>/<span id="bagSize">{{ intval(setting('blockclicker.bag_size') ?? '10') + $myPlayers->bag_size }}</span>)
+                            (<span id="bagUsed">{{ $myPlayers->bagSizeUsed() }}</span>/<span id="bagSize">{{ $myPlayers->bagSize() }}</span>)
                             @endif
                         </div>
                     </div>
@@ -40,7 +40,7 @@
                             @if($mined->amount > 0)
                                 <div class="col-2 text-end" style="z-index: 100;">
                                     <img src="{{$mined->block->image}}" style="width: -webkit-fill-available;" id="mined_{{ $mined->id }}" data-block-id="{{ $mined->block->id }}" data-amount="{{ $mined->amount }}">
-                                    <span class="badge badge-blockclicker">{{ $mined->amount }}</span>
+                                    <span class="badge-blockclicker">{{ $mined->amount }}</span>
                                 </div>
                             @endif
                         @endforeach
@@ -92,15 +92,18 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-sm-6">
+        <div class="col-12 col-sm-6" id="blockclicker-miner">
             @if($myPlayers == null)
             <div>
                 {{ trans('blockclicker::public.need_auth') }}
             </div>
+            @elseif($myPlayers->bagSizeUsed() >= $myPlayers->bagSize())
+                {{ trans('blockclicker::public.bag.full') }}
             @else
-            <div class="image-container" style="max-width: -webkit-fill-available; height: auto;">
-                <img style="display: none; max-width: -webkit-fill-available; height: auto;" id="block-img" onclick="handleClick()">
-            </div>
+                <progress value="0" id="image-progress"></progress>
+                <div class="image-container" style="max-width: -webkit-fill-available; height: auto;">
+                    <img style="display: none; max-width: -webkit-fill-available; height: auto;" id="block-img" onclick="handleClick()">
+                </div>
             @endif
         </div>
     </div>
@@ -108,25 +111,45 @@
 
 @push('scripts')
     <script type="text/javascript">
+        const blockImgElement = document.getElementById("block-img");
+        const progressElement = document.getElementById("image-progress");
+        const baseUsedElement = document.getElementById("bagUsed");
+
+        function isMineLimited() {
+            return parseInt(baseUsedElement.innerHTML) >= parseInt(document.getElementById("bagSize").innerHTML);
+        }
+
+        async function updateProgressBar(actual, required) {
+            progressElement.value = actual;
+            progressElement.max = required;
+        }
+
+        async function manageTooManyBlock() {
+            document.getElementById("blockclicker-miner").innerHTML = `{{ trans('blockclicker::public.bag.full') }}`;
+        }
 
         async function nextBlock() {
             const block = await (await fetch("{{ route('blockclicker.random') }}")).json()
-            var img = document.getElementById("block-img");
-            img.style.display = null;
-            img.src = block.image;
-            update();
+            if(Object.keys(block).length === 0) {
+                manageTooManyBlock();
+            } else {
+                blockImgElement.style.display = null;
+                blockImgElement.src = block.image;
+                updateProgressBar(block.actual, block.required);
+            }
+            updateMinedBlocks();
         }
 
         var canClick = true;
 
         async function handleClick() {
-            if(!canClick)
+            if(!canClick || isMineLimited())
                 return;
             canClick = false;
-            document.getElementById("block-img").classList.add("shake");
+            blockImgElement.classList.add("shake");
             
             setTimeout(() => {
-                document.getElementById("block-img").classList.remove("shake");
+                blockImgElement.classList.remove("shake");
                 canClick = true;
             }, parseInt('{{ setting("blockclicker.time_cooldown") }}'));
             
@@ -140,10 +163,15 @@
                 nextBlock();
             } else if(result.result == "nothing") {
                 nextBlock();
+            } else if(result.result == "too_many") {
+                manageTooManyBlock();
+                updateMinedBlocks();
+            } else if(result.result == "not_finished") {
+                updateProgressBar(result.actual, result.required);
             }
         }
 
-        async function update() {
+        async function updateMinedBlocks() {
             var body = document.getElementById("myPlayers");
             const result = await (await fetch("{{ route('blockclicker.mined') }}")).json();
             body.innerHTML = "";
@@ -156,20 +184,23 @@
                     <div class="col-2 text-end">
                         <img src="` + line.block_image + `" style="width: -webkit-fill-available;" id="mined_` + line.id + `"
                             data-block-id="` + line.block_id + `" data-amount="` + line.amount + `">
-                        <span class="badge badge-blockclicker">` + line.amount + `</span>
+                        <span class="badge-blockclicker">` + line.amount + `</span>
                     </div>`;
                 totalAmount += line.amount;
                 size += line.block_size * line.amount;
             }
+            const maxBagSize = parseInt(document.getElementById("bagSize").innerHTML);
             document.getElementById("sendButton").disabled = totalAmount == 0;
-            document.getElementById("bagUsed").textContent = size;
+            baseUsedElement.textContent = size > maxBagSize ? maxBagSize : size;
             document.getElementById("trash-img").innerHTML = "";
             document.getElementById("trash-manager").innerHTML = "";
+            if(size >= maxBagSize)
+                manageTooManyBlock();
         }
 
         async function send() {
             await axios.post("{{ route('blockclicker.send') }}");
-            update(); // should be empty
+            updateMinedBlocks(); // should be empty
         }
 
         async function trash() {
@@ -181,7 +212,7 @@
                 "blockId": input.dataset.blockId,
                 "amount": input.value
             });
-            update();
+            location.reload();
         }
 
         nextBlock();
@@ -206,7 +237,7 @@
         div.parentNode.remove();
         ev.target.appendChild(div);
         trash.classList.remove("d-none");
-        trash.innerHTML = `<input type="number" class="form-control" style="max-width: 80px;" value="` + datas.amount + `" min="0" max="` + datas.amount + `" data-block-id="` + datas.blockId + `">`;
+        trash.innerHTML = `<input type="number" class="form-control" style="max-width: 100px;" value="` + datas.amount + `" min="0" max="` + datas.amount + `" data-block-id="` + datas.blockId + `">`;
     }
     </script>
 @endpush

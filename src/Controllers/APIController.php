@@ -12,8 +12,15 @@ use Illuminate\Http\Request;
 class APIController extends Controller {
 
     public function click(Request $request) {
+        $userId = auth()->user()->getAuthIdentifier();
+        $player = Players::where("user_id", $userId)->first();
         $actualClicks = $request->session()->get("blockclicker_actual");
         if($actualClicks == null) {
+            if($player != null && $player->bagSizeUsed() >= $player->bagSize()) {
+                return json_encode([
+                    "result" => "too_many"
+                ]);
+            }
             return json_encode([
                 "result" => "nothing"
             ]);
@@ -29,8 +36,6 @@ class APIController extends Controller {
         $click = $actualClicks["click"] + 1;
         if($click >= $block->required_click) {
             $request->session()->remove("blockclicker_actual");
-            $userId = auth()->user()->getAuthIdentifier();
-            $player = Players::where("user_id", $userId)->first();
             if($player == null) { // just create one
                 $player = Players::create([
                     "user_id" => $userId,
@@ -64,15 +69,22 @@ class APIController extends Controller {
         }
         // vérifier le click
         return json_encode([
-            "result" => "not_finished"
+            "result" => "not_finished",
+            "actual" => $click,
+            "required" => $block->required_click
         ]);
     }
 
     public function getRandom(Request $request) {
         $actualClicks = $request->session()->get("blockclicker_actual");
-        if($actualClicks != null)
+        if($actualClicks != null) {
             $choosedBlock = $actualClicks["block"];
-        else {
+            $click = $actualClicks["click"];
+        } else {
+            $click = 0;
+            $player = Players::where("user_id", auth()->user()->getAuthIdentifier())->first();
+            if($player->bagSizeUsed() >= $player->bagSize())
+                return json_encode([]);
             $blocks = [];
             foreach(Blocks::all() as $block) {
                 for($i = 0; $i < $block->luck; $i++) {
@@ -85,7 +97,9 @@ class APIController extends Controller {
         return json_encode([
             "id" => $choosedBlock->id,
             "name" => $choosedBlock->name,
-            "image" => $choosedBlock->image
+            "image" => $choosedBlock->image,
+            "actual" => $click,
+            "required" => $choosedBlock->required_click
         ]);
     }
 

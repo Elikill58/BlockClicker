@@ -47,6 +47,10 @@ class Players extends Model {
         return Mineds::where("player_id", $this->id)->get();
     }
 
+    public function bagSize() {
+        return intval(setting('blockclicker.bag_size') ?? '10') + $this->bag_size;
+    }
+
     public function bagSizeUsed() {
         $mineds = $this->mineds();
         $i = 0;
