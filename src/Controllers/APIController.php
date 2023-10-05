@@ -109,6 +109,7 @@ class APIController extends Controller {
                     "block_id" => $mined->block->id,
                     "block_name" => $mined->block->name,
                     "block_image" => $mined->block->image,
+                    "block_size" => $mined->block->size,
                     "amount" => $mined->amount,
                     "amount_reward" => $mined->amount_reward
                 ]);

@@ -51,7 +51,7 @@ class Players extends Model {
         $mineds = $this->mineds();
         $i = 0;
         foreach($mineds as $m)
-            $i += $m->amount;
+            $i += $m->block->size * $m->amount;
         return $i;
     }
 

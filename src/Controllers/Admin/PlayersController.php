@@ -16,7 +16,7 @@ class PlayersController extends Controller {
     public function store(PlayersRequest $playerRequest) {
         Players::create($playerRequest->validated());
 
-        return redirect()->route('blockclicker.admin.index')
+        return redirect()->route('blockclicker.admin.players.index')
             ->with('success', trans('blockclicker::admin.block.created'));
     }
 
@@ -27,7 +27,7 @@ class PlayersController extends Controller {
     public function update(PlayersRequest $request, Players $player)
     {
         $player->update($request->validated());
-        return redirect()->route('blockclicker.admin.index')
+        return redirect()->route('blockclicker.admin.players.index')
             ->with('success', trans('blockclicker::admin.players.updated'));
     }
 
@@ -35,7 +35,7 @@ class PlayersController extends Controller {
     {
         $player->delete();
 
-        return redirect()->route('blockclicker.admin.index')
+        return redirect()->route('blockclicker.admin.players.index')
             ->with('success', trans('blockclicker::admin.players.deleted'));
     }
 }

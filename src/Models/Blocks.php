@@ -21,7 +21,7 @@ class Blocks extends Model {
      *
      * @var array
      */
-    protected $fillable = ['id', 'name', 'minecraft_id', 'image', 'required_click', 'luck'];
+    protected $fillable = ['id', 'name', 'minecraft_id', 'image', 'required_click', 'luck', 'size'];
     /**
      * The attributes that should be cast to native types.
      *
@@ -29,6 +29,7 @@ class Blocks extends Model {
      */
     protected $casts = [
         'required_click' => 'integer',
-        'luck' => 'integer'
+        'luck' => 'integer',
+        'size' => 'integer'
     ];
 }

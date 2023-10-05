@@ -39,5 +39,6 @@ return [
     "default_bag_size" => "Taille du sac par défaut",
     "server_id" => "Server",
     "minecraft_id" => "ID utilisé par Minecraft",
-    "time_cooldown" => "Temps (en millisecondes) minimum entre 2 clics"
+    "time_cooldown" => "Temps (en millisecondes) minimum entre 2 clics",
+    "size" => "Poids du bloc"
 ];

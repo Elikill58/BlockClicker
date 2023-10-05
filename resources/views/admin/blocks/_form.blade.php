@@ -37,6 +37,15 @@
         @enderror
     </div>
     <div class="mb-3">
+        <label class="form-label" for="sizeInput">{{ trans('blockclicker::admin.size') }}</label>
+        <input type="text" class="form-control @error('description') is-invalid @enderror" id="sizeInput"
+               name="size" value="{{ old('size', $block->size ?? '') }}">
+
+        @error('size')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+    </div>
+    <div class="mb-3">
         <label class="form-label" for="imageInput">{{ trans('messages.fields.image') }}</label>
         <input type="file" class="form-control @error('image') is-invalid @enderror" id="imageInput"
                 name="imageFake" onchange="update64File()">

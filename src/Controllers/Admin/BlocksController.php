@@ -20,7 +20,7 @@ class BlocksController extends Controller {
     public function store(BlocksRequest $blockRequest) {
         Blocks::create($blockRequest->validated());
 
-        return to_route('blockclicker.admin.index')
+        return to_route('blockclicker.admin.blocks.index')
             ->with('success', trans('blockclicker::admin.block.created'));
     }
 
@@ -30,7 +30,7 @@ class BlocksController extends Controller {
 
     public function update(BlocksRequest $request, Blocks $block) {
         $block->update($request->validated());
-        return redirect()->route('blockclicker.admin.index')
+        return redirect()->route('blockclicker.admin.blocks.index')
             ->with('success', trans('blockclicker::admin.blocks.updated'));
     }
 
@@ -38,7 +38,7 @@ class BlocksController extends Controller {
     {
         $block->delete();
 
-        return redirect()->route('blockclicker.admin.index')
+        return redirect()->route('blockclicker.admin.blocks.index')
             ->with('success', trans('blockclicker::admin.blocks.deleted'));
     }
 }

@@ -148,6 +148,7 @@
             const result = await (await fetch("{{ route('blockclicker.mined') }}")).json();
             body.innerHTML = "";
             var totalAmount = 0;
+            var size = 0;
             for(var line of result) {
                 if(line.amount == 0)
                     continue;
@@ -158,9 +159,10 @@
                         <span class="badge badge-blockclicker">` + line.amount + `</span>
                     </div>`;
                 totalAmount += line.amount;
+                size += line.block_size * line.amount;
             }
             document.getElementById("sendButton").disabled = totalAmount == 0;
-            document.getElementById("bagUsed").textContent = totalAmount;
+            document.getElementById("bagUsed").textContent = size;
             document.getElementById("trash-img").innerHTML = "";
             document.getElementById("trash-manager").innerHTML = "";
         }

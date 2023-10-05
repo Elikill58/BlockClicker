@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->text('image');
             $table->unsignedInteger('required_click');
             $table->unsignedInteger('luck');
+            $table->unsignedInteger('size');
             $table->timestamps();
         });
         Schema::create('blockclicker_players', function (Blueprint $table) {

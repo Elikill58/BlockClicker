@@ -18,7 +18,8 @@ class BlocksRequest extends FormRequest {
             'minecraft_id' => ['required', 'string', 'max:100'],
             'image' => ['required', 'string'],
             'required_click' => ['required', 'integer'],
-            'luck' => ['required', 'integer']
+            'luck' => ['required', 'integer'],
+            'size' => ['required', 'integer']
         ];
     }
 }
