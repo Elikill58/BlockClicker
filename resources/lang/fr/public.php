@@ -3,7 +3,7 @@
 return [
     'title' => 'Block Clicker',
     "need_auth" => "Vous devez être connecté.",
-    "send" => "Envoyer",
+    "send" => "Récupérer",
     'block' => [
         "updated" => "Block ajouté a ceux déjà miné !",
         "created" => "Nouveau block miné !"

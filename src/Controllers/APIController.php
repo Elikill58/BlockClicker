@@ -105,6 +105,8 @@ class APIController extends Controller {
             $myPlayers = Players::where("user_id", $userId)->first();
             foreach($myPlayers->mineds() as $mined) {
                 array_push($mineds, [
+                    "id" => $mined->id,
+                    "block_id" => $mined->block->id,
                     "block_name" => $mined->block->name,
                     "block_image" => $mined->block->image,
                     "amount" => $mined->amount,
@@ -123,7 +125,7 @@ class APIController extends Controller {
         if($auth == null || $auth->user() == null) 
             return;
         $user = $auth->user();
-        $userId = $auth->user()->getAuthIdentifier();
+        $userId = $user->getAuthIdentifier();
         $srv = Server::where("id", $serverId)->first();
         $player = Players::where("user_id", $userId)->first();
         $commands = [];
@@ -136,5 +138,28 @@ class APIController extends Controller {
             $mined->update();
         }
         $srv->bridge()->sendCommands($commands, $user, true);
+    }
+    
+    public function trash(Request $request) {
+        $blockId = $request->input("blockId");
+        $amount = $request->input("amount");
+        if($blockId == null || $amount == null)
+            return;
+        if($amount < 0)
+            return;
+        $auth = auth();
+        if($auth == null || $auth->user() == null) 
+            return;
+        $userId = $auth->user()->getAuthIdentifier();
+        $player = Players::where("user_id", $userId)->first();
+        $mined = Mineds::where("player_id", $player->id)->where("block_id", $blockId)->first();
+        if($mined == null)
+            return;
+        if($mined->amount <= $amount) {
+            $mined->amount = 0;
+        } else {
+            $mined->amount -= $amount;
+        }
+        $mined->update();
     }
 }

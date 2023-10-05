@@ -38,14 +38,19 @@
                     <div class="d-flex" id="myPlayers">
                         @foreach($myPlayers->mineds() as $mined)
                             @if($mined->amount > 0)
-                                <div class="col-2 text-end">
-                                    <img src="{{$mined->block->image}}" style="width: -webkit-fill-available;">
+                                <div class="col-2 text-end" style="z-index: 100;">
+                                    <img src="{{$mined->block->image}}" style="width: -webkit-fill-available;" id="mined_{{ $mined->id }}" data-block-id="{{ $mined->block->id }}" data-amount="{{ $mined->amount }}">
                                     <span class="badge badge-blockclicker">{{ $mined->amount }}</span>
                                 </div>
                             @endif
                         @endforeach
                     </div>
                     @endif
+                    <div class="d-flex my-2" style="align-items: center;">
+                        <div style="width: 50px; min-height: 20px; padding: 10px; border: 1px solid #aaaaaa;" id="trash-img" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        <div class="d-none" id="trash-manager"></div>
+                        <a href="#blockclicker" onclick="trash()"><i class="bi bi-trash-fill mx-1"></i></a>
+                    </div>
                 </div>
             </div>
             <div class="card">
@@ -105,8 +110,7 @@
     <script type="text/javascript">
 
         async function nextBlock() {
-            var rawResult = await fetch("{{ route('blockclicker.random') }}");
-            var block = await rawResult.json();
+            const block = await (await fetch("{{ route('blockclicker.random') }}")).json()
             var img = document.getElementById("block-img");
             img.style.display = null;
             img.src = block.image;
@@ -125,7 +129,8 @@
                 document.getElementById("block-img").classList.remove("shake");
                 canClick = true;
             }, parseInt('{{ setting("blockclicker.time_cooldown") }}'));
-            const result = await (await fetch("{{ route('blockclicker.click') }}")).json();
+            
+            const result = (await axios.post("{{ route('blockclicker.click') }}")).data;
             if(result.result == "updated" || result.result == "created") {
                 document.getElementById("blockclicker-alert").classList.remove("d-none");
                 document.getElementById("blockclicker-message").textContent = (result.result == "updated" ? "{{ trans('blockclicker::public.block.updated') }}" : "{{ trans('blockclicker::public.block.created') }}");
@@ -141,7 +146,6 @@
         async function update() {
             var body = document.getElementById("myPlayers");
             const result = await (await fetch("{{ route('blockclicker.mined') }}")).json();
-            document.getElementById("sendButton").disabled = result.length == 0;
             body.innerHTML = "";
             var totalAmount = 0;
             for(var line of result) {
@@ -149,19 +153,58 @@
                     continue;
                 body.innerHTML += `
                     <div class="col-2 text-end">
-                        <img src="` + line.block_image + `" style="width: -webkit-fill-available;">
+                        <img src="` + line.block_image + `" style="width: -webkit-fill-available;" id="mined_` + line.id + `"
+                            data-block-id="` + line.block_id + `" data-amount="` + line.amount + `">
                         <span class="badge badge-blockclicker">` + line.amount + `</span>
                     </div>`;
                 totalAmount += line.amount;
             }
+            document.getElementById("sendButton").disabled = totalAmount == 0;
             document.getElementById("bagUsed").textContent = totalAmount;
+            document.getElementById("trash-img").innerHTML = "";
+            document.getElementById("trash-manager").innerHTML = "";
         }
 
         async function send() {
-            await fetch("{{ route('blockclicker.send') }}");
+            await axios.post("{{ route('blockclicker.send') }}");
             update(); // should be empty
         }
 
+        async function trash() {
+            var trash = document.getElementById("trash-manager");
+            var input = trash.getElementsByTagName("input")[0];
+            trash.innerHTML = "";
+            trash.classList.add("d-none");
+            await axios.post("{{ route('blockclicker.trash') }}", {
+                "blockId": input.dataset.blockId,
+                "amount": input.value
+            });
+            update();
+        }
+
         nextBlock();
+    </script>
+
+    <script>
+    document.addEventListener("dragstart", manageDrag);
+
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function manageDrag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function drop(ev) {
+        ev.preventDefault();
+        var div = document.getElementById(ev.dataTransfer.getData("text"));
+        var datas = div.dataset;
+        var trash = document.getElementById("trash-manager");
+        div.parentNode.remove();
+        ev.target.appendChild(div);
+        trash.classList.remove("d-none");
+        trash.innerHTML = `<input type="number" class="form-control" style="max-width: 80px;" value="` + datas.amount + `" min="0" max="` + datas.amount + `" data-block-id="` + datas.blockId + `">`;
+    }
     </script>
 @endpush
