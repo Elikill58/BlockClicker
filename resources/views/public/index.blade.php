@@ -100,7 +100,7 @@
             @elseif($myPlayers->bagSizeUsed() >= $myPlayers->bagSize())
                 {{ trans('blockclicker::public.bag.full') }}
             @else
-                <progress value="0" id="image-progress"></progress>
+                <progress value="0" id="image-progress" style="width: 100%;"></progress>
                 <div class="image-container" style="max-width: -webkit-fill-available; height: auto;">
                     <img style="display: none; max-width: -webkit-fill-available; height: auto;" id="block-img" onclick="handleClick()">
                 </div>
