@@ -7,11 +7,11 @@
 @endpush
 
 @section('content')
-    <div class="alert alert-success alert-dismissible d-none" id="blockclicker-alert" role="alert">
+    <!--div class="alert alert-success alert-dismissible d-none" id="blockclicker-alert" role="alert">
         <i class="bi bi-check-circle"></i>
         <span id="blockclicker-message"></span>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+    </div-->
     <div class="row" id="blockclicker">
         <div class="col-12 col-sm-6">
             <div class="card mb-2">
@@ -132,11 +132,11 @@
             
             const result = (await axios.post("{{ route('blockclicker.click') }}")).data;
             if(result.result == "updated" || result.result == "created") {
-                document.getElementById("blockclicker-alert").classList.remove("d-none");
+                /*document.getElementById("blockclicker-alert").classList.remove("d-none");
                 document.getElementById("blockclicker-message").textContent = (result.result == "updated" ? "{{ trans('blockclicker::public.block.updated') }}" : "{{ trans('blockclicker::public.block.created') }}");
                 setTimeout(() => {
                     document.getElementById("blockclicker-alert").classList.add("d-none");
-                }, 3000);
+                }, 3000);*/
                 nextBlock();
             } else if(result.result == "nothing") {
                 nextBlock();
